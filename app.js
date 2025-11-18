@@ -28,6 +28,7 @@ const institutionsRoute = require('./routes/institutions');
 const productRoute = require('./routes/products');
 const userRoute = require('./routes/users');
 const orderRoute = require('./routes/orders');
+const serviceRoute = require("./routes/service");
 const {PORT}=process.env
 
 // Routes
@@ -37,6 +38,8 @@ app.use(`${api}/categories`, categoriesRoute);
 app.use(`${api}/institutions`, institutionsRoute);
 app.use(`${api}/users`, userRoute);
 app.use(`${api}/orders`, orderRoute);
+app.use(`${api}/services`, serviceRoute);
+
 
 const dbConfig = require('./config/database.config.js');
 

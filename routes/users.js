@@ -64,26 +64,69 @@ router.delete('/:id', (req, res) => {
     })
 })
 
+// router.post('/login', async (req, res) => {
+//     const user = await User.findOne({ email: req.body.email })
+//     const secret = process.env.secret;
+
+//     if (!user) {
+//         return res.status(400).send('User with given Email not found');
+//     }
+
+//     if (user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
+//         const token = jwt.sign({
+//             userID: user.id,
+//             isAdmin: user.isAdmin
+//         }, secret, { expiresIn: '1d' })
+//       return  res.status(200).send({ user: user.email, token: token });
+//     } else {
+//        return res.status(400).send('Password is mismatch');
+//     }
+
+//     return res.status(200).send(user);
+// })
+
 router.post('/login', async (req, res) => {
-    const user = await User.findOne({ email: req.body.email })
-    const secret = process.env.secret;
+  try {
+    const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-        return res.status(400).send('User with given Email not found');
+      return res.status(400).json({ success: false, message: 'User with given email not found' });
     }
 
-    if (user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
-        const token = jwt.sign({
-            userID: user.id,
-            isAdmin: user.isAdmin
-        }, secret, { expiresIn: '1d' })
-      return  res.status(200).send({ user: user.email, token: token });
-    } else {
-       return res.status(400).send('Password is mismatch');
+    const passwordMatch = bcrypt.compareSync(req.body.password, user.passwordHash);
+
+    if (!passwordMatch) {
+      return res.status(400).json({ success: false, message: 'Password mismatch' });
     }
 
-    return res.status(200).send(user);
-})
+    const secret = process.env.secret;
+
+    const token = jwt.sign(
+      {
+        userID: user.id,
+        isAdmin: user.isAdmin,
+      },
+      secret,
+      { expiresIn: '1d' }
+    );
+
+    // Remove passwordHash before sending response
+    const userData = user.toObject();
+    delete userData.passwordHash;
+
+    return res.status(200).json({
+      success: true,
+      message: "Login successful",
+      token: token,
+      user: userData,
+    });
+
+  } catch (error) {
+    console.error("Login Error:", error);
+    return res.status(500).json({ success: false, message: "Server Error", error: error.message });
+  }
+});
+
 
 router.get('/get/count', async (req, res) => {
     const userCount = await User.countDocuments((count) => count);
