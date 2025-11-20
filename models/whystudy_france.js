@@ -3,9 +3,13 @@ const mongoose = require('mongoose');
 const servicesSchema = mongoose.Schema({
     title: {
         type: String,
-        required: true      // Academics, Satisfaction, Experience, Life, Community
+        required: true
     },
-    content: {
+    subtitle: {
+        type: String,
+        required: true
+    },
+      description: {
         type: String,
         required: true
     },
@@ -17,4 +21,4 @@ const servicesSchema = mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Services', servicesSchema);
+module.exports = mongoose.model('Whystudyfrance', servicesSchema);

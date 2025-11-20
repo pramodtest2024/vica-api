@@ -1,12 +1,12 @@
 const jwt = require("jsonwebtoken");
 
 module.exports = function (req, res, next) {
-  const token = req.header("APPLIFRANCE"); // custom header
+  const token = req.header("APPLIFRANCE-JWT"); // custom header
 
   if (!token) {
     return res.status(401).json({
       success: false,
-      message: "Token missing (APPLIFRANCE header required)"
+      message: "Token missing (APPLIFRANCE-JWT header required)"
     });
   }
 
