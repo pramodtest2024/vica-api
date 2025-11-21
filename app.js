@@ -31,6 +31,8 @@ const orderRoute = require('./routes/orders');
 const servicesRoute = require('./routes/services');
 const whystudyfranceRoute = require('./routes/whystudyfrance');
 const blogsRoute = require('./routes/blogs');
+const universityRoutes = require("./routes/universitydetails");
+const universitysearchRoutes = require("./routes/universitysearch");
 const {PORT}=process.env
 
 // Routes
@@ -43,6 +45,8 @@ app.use(`${api}/orders`, orderRoute);
 app.use(`${api}/whystudyfrance`, whystudyfranceRoute);
 app.use(`${api}/services`, servicesRoute);
 app.use(`${api}/blogs`, blogsRoute);
+app.use(`${api}/universitydetails`, universityRoutes);
+app.use(`${api}/universitysearch`, universitysearchRoutes);
 
 
 const dbConfig = require('./config/database.config.js');
